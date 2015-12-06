@@ -13,6 +13,8 @@ public class GameGrid extends JPanel{
 	public boolean playing = false;
 	public boolean flagMode = false;
 	private int difficulty;
+	private int numClicked = 0;
+	private int numMines;
 	
 	public class Tuple{
 		public int x;
@@ -44,14 +46,18 @@ public class GameGrid extends JPanel{
 				grid[i][j].yGrid = j;
 			}
 		}
-		if(difficulty == 0)
+		if(difficulty == 1){
 			addMines(10);
-		else
+			numMines = 10;
+		}
+		else{
 			addMines(70);
+			numMines = 70;
+		}
 		setTileNeighbors();
 		
 		this.status = status;
-		
+		final int numTotal = 9*9*difficulty*difficulty;
 		 addMouseListener(new MouseAdapter() {
              @Override
              public void mousePressed(MouseEvent e) {
@@ -59,7 +65,8 @@ public class GameGrid extends JPanel{
                  int yPos = e.getY();
                  xPos = xPos - (xPos % 40);
                  yPos = yPos - (yPos % 40);
-
+                 
+                 System.out.println(numTotal - numMines);
                  if(playing){
                      for(Tile[] a : grid){
                     	 for(Tile t : a){
@@ -70,21 +77,27 @@ public class GameGrid extends JPanel{
                     			 else{
                     				 if(!t.isFlagged){
                     					 if(t.hasMine()){
-                                			 
                         					 playing = false;
                         					 status.setText("You Lose!");
                         				 }
                             			 if(!t.wasClicked){
                             				 t.clicked();
+                            				 numClicked++;
                             				 floodMines(t);		 
                             			 } 
                     				 }
                     				 
                     			 }
+                			 
                     		 }
-                    		
+                    		 
+                		
                      	 }
                      }
+                     if(numClicked == numTotal - numMines){
+                		 playing = false;
+    					 status.setText("Winner!");
+                	 }
                  }
  
                  repaint();
@@ -142,8 +155,11 @@ public class GameGrid extends JPanel{
 			for(int k = -1; k <= 1; k++){
 				if( (j + t.xGrid) >= 0 && (j + t.xGrid) < 9*difficulty &&
 						(k + t.yGrid) >=0 && (k + t.yGrid) < 9*difficulty){
-					if(!grid[t.xGrid + j][t.yGrid + k].wasClicked)
+					if(!grid[t.xGrid + j][t.yGrid + k].wasClicked){
 						grid[t.xGrid + j][t.yGrid + k].clicked();
+						numClicked++;
+					}
+						
 				}
 			}
 		}
@@ -164,6 +180,7 @@ public class GameGrid extends JPanel{
 		setTileNeighbors();
 		playing = true;
 		status.setText("Playing");
+		numClicked = 0;
 		repaint();
 
 	}

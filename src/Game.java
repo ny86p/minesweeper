@@ -35,7 +35,7 @@ public class Game implements Runnable {
 		status_panel.add(status);
 
 		// Main playing area
-		final GameGrid grid = new GameGrid(status,2);
+		final GameGrid grid = new GameGrid(status,1);
 		frame.add(grid, BorderLayout.CENTER);
 
 		grid.reset();
