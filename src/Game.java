@@ -62,7 +62,7 @@ public class Game implements Runnable {
 				grid.flagMode = !grid.flagMode;
 			}
 		});
-		control_panel.add(reset);
+		control_panel.add(reset); 
 		control_panel.add(flagger);
 
 
