@@ -21,22 +21,7 @@ public class Game implements Runnable {
 	public void run() {
 		// NOTE : recall that the 'final' keyword notes inmutability
 		// even for local variables.
-		final JFrame startPage = new JFrame("MineSweeper-Begin");
-		
-		final JButton reset = new JButton("Reset");
-		reset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				final GameGrid grid = new GameGrid(status);
-			}
-		});
-		grid.flagMode = false;
-		final JButton flagger = new JButton("flag");
-		flagger.setSize(200, 400);
-		flagger.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				grid.flagMode = !grid.flagMode;
-			}
-		});
+
 		
 		// Top-level frame in which game components live
 		// Be sure to change "TOP LEVEL FRAME" to the name of your game
@@ -50,7 +35,7 @@ public class Game implements Runnable {
 		status_panel.add(status);
 
 		// Main playing area
-		final GameGrid grid = new GameGrid(status);
+		final GameGrid grid = new GameGrid(status,2);
 		frame.add(grid, BorderLayout.CENTER);
 
 		grid.reset();
@@ -72,7 +57,6 @@ public class Game implements Runnable {
 		});
 		grid.flagMode = false;
 		final JButton flagger = new JButton("flag");
-		flagger.setSize(200, 400);
 		flagger.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				grid.flagMode = !grid.flagMode;
