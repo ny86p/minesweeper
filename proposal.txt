@@ -1,0 +1,99 @@
+=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
+CIS 120 Game Project Proposal
+PennKey: ryanpaul
+=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
+
+===============
+=: Your Game :=
+===============
+
+- What game are you planning to implement? If it is a game of your own design,
+  or not especially well-known, provide a 2-3 sentence description of the game.
+
+I am planning on implementing Mine-sweeper.
+
+- What classes and interfaces do you plan to create? How will the different
+  components of your game (the model, the GUI, etc.) interact?
+
+I am planning on creating a tile Class, which holds values such as, is there a bomb behind a tile or
+is it flagged, or was it selected. 
+Then I will have a Board class that will store a 2-D array representing the state of the board. The 
+2-D array will be comprised of tile instances.  
+
+- What do you think will be the most challenging thing to implement?
+
+I think the search algorithm for finding which other tiles to remove after a tile is pressed on or
+clicked. In Mine-sweeper, once a tile is clicked, if a blank tile is selected, then adjacent tiles 
+are continuously removed until there is a ring of non-blank spots on the grid, meaning the spots
+have some number value of bombs adjacent to it.
+
+====================
+=: Core Concept 1 :=
+====================
+
+Concept 1: Modeling State using 2-D Arrays
+
+- What specific feature of your game will be implemented using this concept?
+The grid for the Mine-sweeper board will be represented by a 2-D array. To start element of the 
+array will be occupied by an instance of the tile class. The structure allows easy access to values
+of each part of the grid, so we can quickly check whether a selected tile has a mine.
+
+- Why does it make sense to implement this feature with this concept? Justify
+  why this is a non-trivial application of the concept in question.
+ 
+This makes sense as the game board is not re-sizable, and the game board is a regular grid.
+
+====================
+=: Core Concept 2 :=
+====================
+
+Concept 2: Search
+
+- What specific feature of your game will be implemented using this concept?
+
+We will have a search algorithm for removing adjacent tiles if necessary. We will constantly 
+check if a blank tile is clicked, and if that is done then we will make use of the search algorithm
+in order to determine which tiles should be removed. 
+
+- Why does it make sense to implement this feature with this concept? Justify
+  why this is a non-trivial application of the concept in question.
+
+We need to do a search among the grid to determine which tiles are necessary to remove. This is 
+non-trivial as we are searching among the grid to find a ring of non-blank tiles around that tile.
+It is as I said earlier the most daunting task of this project.
+
+====================
+=: Core Concept 3 :=
+====================
+
+Concept 3: File IO
+
+- What specific feature of your game will be implemented using this concept?
+I will write high scores out to a file and read them back in each time the game starts to show the
+high score.
+
+- Why does it make sense to implement this feature with this concept? Justify
+  why this is a non-trivial application of the concept in question.
+
+This makes sense as this is the only way to store data from other previously played games, 
+and then if the score of the current game is higher than the high score, write the new high score
+out to a file.
+
+====================
+=: Core Concept 4 :=
+====================
+
+Concept 4: JUnit to test some features of the model
+
+- What specific feature of your game will be implemented using this concept?
+
+I will have a JUnit test that tests whether the game ends upon selecting a tile that has a mine.
+I will also test if the search algorithm properly removes tiles.
+
+- Why does it make sense to implement this feature with this concept? Justify
+  why this is a non-trivial application of the concept in question.
+
+It makes sense to implement this feature, as if the game doesn't end upon a tile with a mine then
+the game is not working properly. Same goes for the search algorithm in removing tiles adjacent to 
+blank tiles.
+
