@@ -34,13 +34,13 @@ public class Game implements Runnable {
 		JLabel status = new JLabel("Running...");
 		status_panel.add(status);
 		
-		final JLabel timer = new JLabel("0000");
+		final JLabel timer = new JLabel("0");
 
 		// Main playing area
 		final GameGrid grid = new GameGrid(status,1,timer);
 		frame.add(grid, BorderLayout.CENTER);
 
-		grid.reset(timer);
+		grid.reset();
 
 		// Reset button
 		final JPanel control_panel = new JPanel();
@@ -53,7 +53,7 @@ public class Game implements Runnable {
 		final JButton reset = new JButton("Reset");
 		reset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				grid.reset(timer);
+				grid.reset();
 			}
 		});
 		grid.flagMode = false;
