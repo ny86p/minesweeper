@@ -18,6 +18,10 @@ import javax.swing.*;
  * Game Main class that specifies the frame and widgets of the GUI
  */
 public class Game implements Runnable {
+	public int gameDifficulty;
+	public Game(int diff){
+		gameDifficulty = diff;
+	}
 	public void run() {
 		// NOTE : recall that the 'final' keyword notes immutability
 		// even for local variables.
@@ -35,13 +39,11 @@ public class Game implements Runnable {
 		status_panel.add(status);
 		
 		final JLabel timer = new JLabel("0");
-
 		// Main playing area
-		final GameGrid grid = new GameGrid(status,1,timer);
+		final GameGrid grid = new GameGrid(status,gameDifficulty,timer);
 		frame.add(grid, BorderLayout.CENTER);
 
 		grid.reset();
-
 		// Reset button
 		final JPanel control_panel = new JPanel();
 		frame.add(control_panel, BorderLayout.NORTH);
@@ -82,7 +84,8 @@ public class Game implements Runnable {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
+		
+	
 	}
 
 	/*
@@ -90,7 +93,5 @@ public class Game implements Runnable {
 	 * specified in Game and runs it IMPORTANT: Do NOT delete! You MUST include
 	 * this in the final submission of your game.
 	 */
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Game());
-	}
+	
 }

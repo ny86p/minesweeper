@@ -12,6 +12,9 @@ public class GameGrid extends JPanel{
 	private int COURT_HEIGHT;
 	
 	public boolean playing = false;
+	public boolean win = false;
+	public boolean lose = false;
+	
 	public boolean flagMode = false;
 	private int difficulty;
 	private int numClicked = 0;
@@ -32,7 +35,7 @@ public class GameGrid extends JPanel{
 	private Tile[][] grid;
 	// Update interval for timer, in milliseconds
 	public int gameTime = 0;
-	public static final int INTERVAL = 900;
+	public static final int INTERVAL = 500;
 	private Timer timer;
 	
 	public GameGrid(final JLabel status, int difficulty, final JLabel time){
@@ -62,7 +65,7 @@ public class GameGrid extends JPanel{
 		
 		final int numTotal = 9*9*difficulty*difficulty;
 		
-		final Timer timer = new Timer(INTERVAL, new ActionListener() {
+		timer = new Timer(INTERVAL, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tick();
 				time.setText(Integer.toString(gameTime));
@@ -72,7 +75,7 @@ public class GameGrid extends JPanel{
 		 addMouseListener(new MouseAdapter() {
              @Override
              public void mousePressed(MouseEvent e) {
-         		 if(!status.getText().equals("You Lose!"))
+         		 if(!lose)
          			 timer.start();
                  int xPos = e.getX();
                  int yPos = e.getY();
@@ -92,6 +95,7 @@ public class GameGrid extends JPanel{
                         					 playing = false;
                         					 timer.stop();
                         					 gameTime = 0;
+                        					 lose = true;
                         					 status.setText("You Lose!");
                         				 }
                             			 if(!t.wasClicked){
@@ -109,10 +113,7 @@ public class GameGrid extends JPanel{
                      	 }
                      }
                      if(numClicked == numTotal - numMines){
-                		 playing = false;
-                		 if(!status.getText().equals("You Lose"))
-                			 timer.stop();
-                			 status.setText("Winner!");
+                		 winGame();
                 	 }
                  }
  
@@ -190,6 +191,23 @@ public class GameGrid extends JPanel{
 		}
 	}
 	
+	public void winGame(){
+		playing = false;
+		if(!lose){
+			timer.stop();
+			status.setText("Winner!");
+			win = true;
+			repaint();
+			JTextField firstName = new JTextField();
+    		final JComponent[] inputs = new JComponent[] {
+    				new JLabel("First"),
+    				firstName,
+    		};
+			JOptionPane.showMessageDialog(null, inputs, "Winner!", JOptionPane.PLAIN_MESSAGE);
+			System.out.println("You entered " + firstName.getText());
+		}
+	}
+	
 	public void reset() {
 		for(int i = 0; i < 9*difficulty; i++){
 			for(int j = 0; j < 9*difficulty; j++){
@@ -209,13 +227,16 @@ public class GameGrid extends JPanel{
 		numClicked = 0;
 		gameTime = 0;
 		time.setText("0");
+		timer.stop();
+
 		try{
-			timer.stop();
 		}
 		catch(Exception e){
 			
 		}
 		status.setText("Playing");
+		win = false;
+		lose = false;
 		repaint();
 
 	}
