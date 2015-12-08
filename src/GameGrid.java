@@ -1,5 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -37,6 +44,18 @@ public class GameGrid extends JPanel{
 	public int gameTime = 0;
 	public static final int INTERVAL = 500;
 	private Timer timer;
+	
+	//For testing purposes:
+	public GameGrid(){
+		for(int i = 0; i < 9; i++){
+			for(int j = 0; j < 9; j++){
+				grid[i][j] = new Tile(40, 40, i*40, j*40);
+				grid[i][j].xGrid = i;
+				grid[i][j].yGrid = j;
+			}
+		}
+		addMines(10);
+	}
 	
 	public GameGrid(final JLabel status, int difficulty, final JLabel time){
 		// Setting up the grid
@@ -204,10 +223,41 @@ public class GameGrid extends JPanel{
     				firstName,
     		};
 			JOptionPane.showMessageDialog(null, inputs, "Winner!", JOptionPane.PLAIN_MESSAGE);
-			System.out.println("You entered " + firstName.getText());
+			saveWinScore(firstName.getText() + ": " + time.getText());
+			
+		}
+	}
+		
+	public void saveWinScore(String c){
+		try {
+
+			String content = c;
+			File file;
+			if(difficulty == 1)
+				file = new File("highscores.txt");
+			else
+				file = new File("highscoresDiff.txt");
+
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(file,true); 
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("\n");
+			bw.write(content);
+			bw.close();
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
+
+
 	public void reset() {
 		for(int i = 0; i < 9*difficulty; i++){
 			for(int j = 0; j < 9*difficulty; j++){
