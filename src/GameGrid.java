@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -29,9 +30,11 @@ public class GameGrid extends JPanel{
 	private ArrayList<Tuple> mines = new ArrayList<Tuple>();
 	private Tile[][] grid;
 	// Update interval for timer, in milliseconds
-	public static final int INTERVAL = 35;
+	public int gameTime = 0;
+	public static final int INTERVAL = 900;
+	private Timer timer;
 	
-	public GameGrid(final JLabel status, int difficulty){
+	public GameGrid(final JLabel status, int difficulty, final JLabel time){
 		// Setting up the grid
 		this.difficulty = difficulty;
 		int adj_size = 9*difficulty;
@@ -46,27 +49,32 @@ public class GameGrid extends JPanel{
 				grid[i][j].yGrid = j;
 			}
 		}
-		if(difficulty == 1){
-			addMines(10);
+		if(difficulty == 1)
 			numMines = 10;
-		}
-		else{
-			addMines(70);
-			numMines = 70;
-		}
+		else
+			numMines = 50;
+		addMines(numMines);
 		setTileNeighbors();
 		
 		this.status = status;
 		final int numTotal = 9*9*difficulty*difficulty;
+		
+		final Timer timer = new Timer(INTERVAL, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tick();
+				time.setText(Integer.toString(gameTime));
+			}
+		});
+		
 		 addMouseListener(new MouseAdapter() {
              @Override
              public void mousePressed(MouseEvent e) {
+         		 timer.start();
                  int xPos = e.getX();
                  int yPos = e.getY();
                  xPos = xPos - (xPos % 40);
                  yPos = yPos - (yPos % 40);
                  
-                 System.out.println(numTotal - numMines);
                  if(playing){
                      for(Tile[] a : grid){
                     	 for(Tile t : a){
@@ -78,6 +86,8 @@ public class GameGrid extends JPanel{
                     				 if(!t.isFlagged){
                     					 if(t.hasMine()){
                         					 playing = false;
+                        					 timer.stop();
+                        					 gameTime = 0;
                         					 status.setText("You Lose!");
                         				 }
                             			 if(!t.wasClicked){
@@ -96,7 +106,9 @@ public class GameGrid extends JPanel{
                      }
                      if(numClicked == numTotal - numMines){
                 		 playing = false;
-    					 status.setText("Winner!");
+                		 if(!status.getText().equals("You Lose"))
+                			 timer.stop();
+                			 status.setText("Winner!");
                 	 }
                  }
  
@@ -110,7 +122,6 @@ public class GameGrid extends JPanel{
 		while(n < numMines){
 			int r = (int) (Math.random()*9*difficulty);
 			int c = (int) (Math.random()*9*difficulty);
-			System.out.println(r + " " + c);
 			if(!grid[r][c].hasMine()){
 				grid[r][c].addMine();
 				mines.add(new Tuple(r,c));
@@ -135,6 +146,10 @@ public class GameGrid extends JPanel{
 				}
 			}
 		}
+	}
+	
+	public void tick(){
+		gameTime++;
 	}
 		
 	public void floodMines(Tile t){
@@ -165,7 +180,7 @@ public class GameGrid extends JPanel{
 		}
 	}
 	
-	public void reset() {
+	public void reset(JLabel t) {
 		for(int i = 0; i < 9*difficulty; i++){
 			for(int j = 0; j < 9*difficulty; j++){
 				grid[i][j] = new Tile(40, 40, 40*i, 40*j);
@@ -176,11 +191,19 @@ public class GameGrid extends JPanel{
 		if(difficulty == 1)
 			addMines(10);
 		else
-			addMines(70);
+			addMines(50);
 		setTileNeighbors();
 		playing = true;
 		status.setText("Playing");
 		numClicked = 0;
+		gameTime = 0;
+		t.setText("0000");
+		try{
+			timer.stop();
+		}
+		catch(Exception e){
+			
+		}
 		repaint();
 
 	}

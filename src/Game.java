@@ -19,7 +19,7 @@ import javax.swing.*;
  */
 public class Game implements Runnable {
 	public void run() {
-		// NOTE : recall that the 'final' keyword notes inmutability
+		// NOTE : recall that the 'final' keyword notes immutability
 		// even for local variables.
 
 		
@@ -33,17 +33,18 @@ public class Game implements Runnable {
 		frame.add(status_panel, BorderLayout.SOUTH);
 		JLabel status = new JLabel("Running...");
 		status_panel.add(status);
+		
+		final JLabel timer = new JLabel("0000");
 
 		// Main playing area
-		final GameGrid grid = new GameGrid(status,1);
+		final GameGrid grid = new GameGrid(status,1,timer);
 		frame.add(grid, BorderLayout.CENTER);
 
-		grid.reset();
+		grid.reset(timer);
 
 		// Reset button
 		final JPanel control_panel = new JPanel();
 		frame.add(control_panel, BorderLayout.NORTH);
-
 		// Note here that when we add an action listener to the reset
 		// button, we define it as an anonymous inner class that is
 		// an instance of ActionListener with its actionPerformed()
@@ -52,19 +53,30 @@ public class Game implements Runnable {
 		final JButton reset = new JButton("Reset");
 		reset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				grid.reset();
+				grid.reset(timer);
 			}
 		});
 		grid.flagMode = false;
-		final JButton flagger = new JButton("flag");
+	
+
+		final JButton flagger = new JButton("Flag");
 		flagger.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				grid.flagMode = !grid.flagMode;
+				if(grid.flagMode){
+					flagger.setBackground(Color.black);
+					flagger.setForeground(Color.red);
+				}
+				else{
+					flagger.setBackground(null);
+					flagger.setForeground(null);
+				}
 			}
 		});
+		
 		control_panel.add(reset); 
 		control_panel.add(flagger);
-
+		control_panel.add(timer);
 
 		// Put the frame on the screen
 		frame.pack();

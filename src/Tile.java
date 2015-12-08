@@ -1,6 +1,10 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 
 
@@ -68,16 +72,35 @@ public class Tile{
 
 		
 		if(!wasClicked && isFlagged){
+			BufferedImage buttonIcon = null;
+			try {
+				buttonIcon = ImageIO.read(new File("flag1.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			g.setColor(Color.black);
 			g.fillRect(xPos, yPos, width, height);
-			g.setColor(Color.green);
+			g.setColor(Color.gray);
 			g.fillRect(xPos-1, yPos-1, width-1, height-1);
+
+			g.drawImage(buttonIcon, xPos, yPos,null);
 		}
 		else if(wasClicked && hasMine){
 			g.setColor(Color.black);
 			g.fillRect(xPos, yPos, width, height);
 			g.setColor(Color.red);
 			g.fillRect(xPos-1, yPos-1, width-1, height-1);
+			BufferedImage mine = null;
+			try {
+				mine = ImageIO.read(new File("mine.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g.drawImage(mine, xPos+9, yPos+10,null);
+
 		}
 		else if(wasClicked){
 			g.setColor(Color.black);
@@ -94,6 +117,7 @@ public class Tile{
 			g.fillRect(xPos, yPos, width, height);
 			g.setColor(Color.gray);
 			g.fillRect(xPos-1, yPos-1, width-1, height-1);
+
 		}
 	}
 }
