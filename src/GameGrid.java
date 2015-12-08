@@ -130,11 +130,11 @@ public class GameGrid extends JPanel{
                      if(winGameCheck()){
                     	 JTextField firstName = new JTextField();
          	    		final JComponent[] inputs = new JComponent[] {
-         	    				new JLabel("First"),
+         	    				new JLabel("Type in Your Name!"),
          	    				firstName,
          	    		};
          				JOptionPane.showMessageDialog(null, inputs, 
-         						"Winner!", JOptionPane.PLAIN_MESSAGE);
+         						"You Won!", JOptionPane.PLAIN_MESSAGE);
          				saveWinScore(firstName.getText() + ": " + time.getText());
                      }
                  }

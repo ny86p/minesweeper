@@ -24,12 +24,30 @@ public class infoPage implements Runnable{
 		status_panel.add(status);
 
 		// Main playing area
-		final JLabel information = new JLabel(" Welcome to Minesweeper ");
-		frame.add(information, BorderLayout.CENTER);
+		JLabel choice = new JLabel("Choose the Difficulty");
+		
+		JOptionPane.showMessageDialog(frame, " Welcome to Minesweeper. \n"
+				+ "Click on the gray tiles to reveal either numbers or mines. \n"
+				+ "If a tile is clicked and a number is revealed, that number represents \n"
+				+ "the number of mines adjacent to that tile. Note that a mine is considered\n"
+				+ "adjacent to a tile if it is in any of the 8 neighboring tiles. You can\n"
+				+ "click the flag button in order to 'flag' tiles, which is done to mark a tile\n"
+				+ "you think contains a mine."
+				+ "Click the reset button to reset the board.\n"
+				+ "There is a timer that displays how long the current game has lasted. \n"
+				+ "Highscores are time based: the faster you win, the better your time and \n"
+				+ "high score ranking. High scores can be found by clicking the high score button.\n"
+				+ "\n Losing occurs whenever you click on a mine. The way to win is to click on \n"
+				+ "and reveal all the tiles that are not containing a mine. Click ok when you\n"
+				+ "are ready to continue, and from there choose the difficulty at which you want\n"
+				+ "to play. An easy game is on a 9x9 board with 10 mines. If you want to challenge\n"
+				+ "yourself, the difficult game is an 18x18 board with 70 mines."
+				+ " Best of luck and enjoy :)");
+		frame.add(choice, BorderLayout.CENTER);
 
 		// Reset button
 		final JPanel control_panel = new JPanel();
-		frame.add(control_panel, BorderLayout.NORTH);
+		frame.add(control_panel, BorderLayout.SOUTH);
 
 		// Note here that when we add an action listener to the reset
 		// button, we define it as an anonymous inner class that is

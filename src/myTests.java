@@ -48,5 +48,13 @@ public class myTests {
 		
 	}
 	
-	
+//	@Test
+//	public void minesFloodWorks() {
+//		// Checks if the algorithm to remove tiles when a blank tile is selected works properly
+//		GameGrid g = new GameGrid();
+//		
+//
+//		
+//		
+//	}
 }

@@ -43,6 +43,12 @@ public class Game implements Runnable {
 		
 		// Top-level frame in which game components live
 		// Be sure to change "TOP LEVEL FRAME" to the name of your game
+		try {
+			loadNewHighScores();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		final JFrame frame = new JFrame("MineSweeper");
 		frame.setLocation(300, 300);
 
@@ -70,6 +76,12 @@ public class Game implements Runnable {
 		reset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				grid.reset();
+				try {
+					loadNewHighScores();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		grid.flagMode = false;
@@ -89,12 +101,7 @@ public class Game implements Runnable {
 				}
 			}
 		});
-		try {
-			loadHighScores();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 		final JButton highScores = new JButton("High Scores");
 		highScores.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -148,7 +155,7 @@ public class Game implements Runnable {
 	 * specified in Game and runs it IMPORTANT: Do NOT delete! You MUST include
 	 * this in the final submission of your game.
 	 */
-	public void loadHighScores() throws IOException{
+	public void loadNewHighScores() throws IOException{
 		BufferedReader br;
 		if(gameDifficulty == 1)
 			br = new BufferedReader(new FileReader("highscores.txt"));
@@ -163,10 +170,21 @@ public class Game implements Runnable {
 			    String namepass[] = line.split(": ");
 			    if(gameDifficulty == 1){
 			    	highScoresEasy.put(Integer.parseInt(namepass[1]),namepass[0]);
-			    	sortedEasyScores.add(Integer.parseInt(namepass[1]));
+			    	boolean c = true;
+			    	for(int s : sortedEasyScores){
+			    		if(s == Integer.parseInt(namepass[1]))
+			    			c = false;
+			    	}
+			    	if(c)
+			    		sortedEasyScores.add(Integer.parseInt(namepass[1]));
 			    }
 			    else{
 			    	highScoresHard.put(Integer.parseInt(namepass[1]),namepass[0]);
+			    	boolean c = true;
+			    	for(int s : sortedHardScores){
+			    		if(s == Integer.parseInt(namepass[1]))
+			    			c = false;
+			    	}
 			    	sortedHardScores.add(Integer.parseInt(namepass[1]));
 			    }
 		        line = br.readLine();
