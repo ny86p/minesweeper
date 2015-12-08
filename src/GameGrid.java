@@ -24,7 +24,7 @@ public class GameGrid extends JPanel{
 	
 	public boolean flagMode = false;
 	private int difficulty;
-	private int numClicked = 0;
+	public int numClicked = 0;
 	private int numMines;
 	
 	public class Tuple{
@@ -38,8 +38,8 @@ public class GameGrid extends JPanel{
 	private JLabel status;
 	private JLabel time;
 	
-	private ArrayList<Tuple> mines = new ArrayList<Tuple>();
-	private Tile[][] grid;
+	public ArrayList<Tuple> mines = new ArrayList<Tuple>();
+	public Tile[][] grid;
 	// Update interval for timer, in milliseconds
 	public int gameTime = 0;
 	public static final int INTERVAL = 500;
@@ -55,6 +55,7 @@ public class GameGrid extends JPanel{
 			}
 		}
 		addMines(10);
+
 	}
 	
 	public GameGrid(final JLabel status, int difficulty, final JLabel time){
@@ -110,18 +111,13 @@ public class GameGrid extends JPanel{
                     			 }
                     			 else{
                     				 if(!t.isFlagged){
-                    					 if(t.hasMine()){
-                        					 playing = false;
-                        					 timer.stop();
-                        					 gameTime = 0;
-                        					 lose = true;
-                        					 status.setText("You Lose!");
-                        				 }
-                            			 if(!t.wasClicked){
+                    					 if(!t.wasClicked){
                             				 t.clicked();
                             				 numClicked++;
                             				 floodMines(t);		 
                             			 } 
+                    					 mineClickedCheck(t);
+                            			 
                     				 }
                     				 
                     			 }
@@ -131,9 +127,16 @@ public class GameGrid extends JPanel{
                 		
                      	 }
                      }
-                     if(numClicked == numTotal - numMines){
-                		 winGame();
-                	 }
+                     if(winGameCheck()){
+                    	 JTextField firstName = new JTextField();
+         	    		final JComponent[] inputs = new JComponent[] {
+         	    				new JLabel("First"),
+         	    				firstName,
+         	    		};
+         				JOptionPane.showMessageDialog(null, inputs, 
+         						"Winner!", JOptionPane.PLAIN_MESSAGE);
+         				saveWinScore(firstName.getText() + ": " + time.getText());
+                     }
                  }
  
                  repaint();
@@ -210,22 +213,19 @@ public class GameGrid extends JPanel{
 		}
 	}
 	
-	public void winGame(){
-		playing = false;
-		if(!lose){
-			timer.stop();
-			status.setText("Winner!");
-			win = true;
-			repaint();
-			JTextField firstName = new JTextField();
-    		final JComponent[] inputs = new JComponent[] {
-    				new JLabel("First"),
-    				firstName,
-    		};
-			JOptionPane.showMessageDialog(null, inputs, "Winner!", JOptionPane.PLAIN_MESSAGE);
-			saveWinScore(firstName.getText() + ": " + time.getText());
-			
+	public boolean winGameCheck(){
+		final int numTotal = 9*9*difficulty*difficulty;
+		if(numClicked == numTotal - numMines){
+			playing = false;
+			if(!lose){
+				timer.stop();
+				status.setText("Winner!");
+				win = true;
+				repaint();
+			}
+			return true;
 		}
+		return false;
 	}
 		
 	public void saveWinScore(String c){
@@ -290,7 +290,17 @@ public class GameGrid extends JPanel{
 		repaint();
 
 	}
-
+	
+	public void mineClickedCheck(Tile t){
+		if(t.hasMine()){
+			 playing = false;
+			 timer.stop();
+			 gameTime = 0;
+			 lose = true;
+			 status.setText("You Lose!");
+		}
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		for(int i = 0; i < 9*difficulty; i++){
