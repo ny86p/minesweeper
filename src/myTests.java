@@ -24,7 +24,12 @@ public class myTests {
 			r = t.x;
 			c = t.y; 
 		}
+<<<<<<< HEAD
 		g.mineClickedCheck(g.getGrid()[r][c]);
+=======
+		System.out.println(r + " " + c);
+		g.mineClickedCheck(g.grid[r][c]);
+>>>>>>> 2ba807e01584e46df595e2c2ae4836e861d04049
 		assertTrue("Problem?",g.lose == true);
 		assertTrue(g.win == false);
 
@@ -47,6 +52,7 @@ public class myTests {
 		
 	}
 	
+<<<<<<< HEAD
 	@Test
 	public void minesFloodWorks() {
 		// X 1 0 0 0 0 0 0 0
@@ -87,4 +93,15 @@ public class myTests {
 		
 		
 	}
+=======
+//	@Test
+//	public void minesFloodWorks() {
+//		// Checks if the algorithm to remove tiles when a blank tile is selected works properly
+//		GameGrid g = new GameGrid();
+//		
+//
+//		
+//		
+//	}
+>>>>>>> 2ba807e01584e46df595e2c2ae4836e861d04049
 }
